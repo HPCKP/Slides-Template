@@ -1,0 +1,248 @@
+\documentclass{beamer}
+\setbeamertemplate{navigation symbols}{}
+\usepackage{beamerthemeshadow}
+\usepackage[english]{layout}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, soul, color, multicol, type1cm, verbatim, latexsym, float,listings}
+\usepackage[official]{eurosym}
+\usepackage{thumbpdf}
+\setbeamercovered{transparent}
+\usetheme{Frankfurt}
+\usefonttheme{professionalfonts}
+% Setup TikZ
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\tikzstyle{block}=[draw opacity=0.7,line width=1.4cm]
+
+\newcommand\BackgroundPicture[1]{%
+\setbeamertemplate{background canvas}{%
+\parbox[c][\paperheight]{\paperwidth}{%
+\vfill \hfill \includegraphics[height=\paperheight,width=\paperwidth]{#1}
+\hfill \vfill
+}}}
+
+%HPCKP Colors <---------------------------------------------------------------------------------------
+\usecolortheme[RGB={112,204,10}]{structure}
+\definecolor{hpcnowdark}{HTML}{2F4447}
+\definecolor{hpcnowlight}{HTML}{CED9DF}
+\setbeamercolor{block body}{fg=black}
+\setbeamercolor{block body alerted}{fg=black}
+\setbeamercolor{normal text}{fg=hpcnowlight}
+\frenchspacing
+\setbeamertemplate{blocks}[default]%[shadow=false]
+\useinnertheme{circles}
+\setbeamertemplate{title page}[default][center,rounded=true,shadow=false]
+%HPCKP Custom Code Hightlight <---------------------------------------------------------------------------------------
+\lstdefinestyle{customcode}{
+  belowcaptionskip=1\baselineskip,
+  breaklines=true,
+  xleftmargin=\parindent,
+  showstringspaces=false,
+  basicstyle=\ttfamily,
+  keywordstyle=\bfseries\color{green!40!black},
+  commentstyle=\itshape\color{purple!40!black},
+  identifierstyle=\color{blue},
+  stringstyle=\color{orange},
+}
+%TITLE <---------------------------------------------------------------------------------------
+\title{Title}
+\subtitle{Subtitle}
+\author{Author1 \& Author2 (Company)}
+\date{}
+
+\begin{document}
+{
+\setbeamertemplate{background canvas}{\includegraphics[height=\paperheight,width=\paperwidth]{hpckp_slide00.png}} 
+\begin{frame}[plain]
+\vspace*{+2.5cm}
+  \titlepage
+\end{frame}
+}
+
+
+\BackgroundPicture{hpckp_bg.jpg}
+\begin{frame}
+\frametitle{Agenda}
+\begin{multicols}{2}
+  \tableofcontents
+\end{multicols}
+\end{frame}
+
+\section{Standard block}
+\frame[t]
+{
+  \frametitle{About HPCKP}
+  \begin{block}{HPC Knowledge Portal}
+HPCKP (High-Performance Computing Knowledge Portal) is an Open Knowledge project focused on the technology transfer and the Knowledge sharing in the HPC Science field.
+  \end{block}
+}
+
+\section{Lists}
+\subsection{bullets}
+% List with bullets (itemize) <---
+% The [<+-| alert@+>] will create a new slide for each element with highliting 
+\frame[t]
+{
+  \frametitle{About Something}
+   \begin{block}{About Something}
+   \begin{itemize}%[<+-| alert@+>]
+	\item one
+	\item two
+	\item three
+	\item four
+   \end{itemize}
+  \end{block}
+}
+
+\subsection{numbers}
+% List with numbers (enumerate) <---
+% The [<+-| alert@+>] will create a new slide for each element with highliting 
+\frame[t]
+{
+  \frametitle{About Something}
+   \begin{block}{About Something}
+   \begin{enumerate}%[<+-| alert@+>]
+	\item one
+	\item two
+	\item three
+	\item four
+   \end{enumerate}
+  \end{block}
+}
+
+\section{Slides with code}
+\subsection{verbatim}
+% If you want to include some code (verbatim or listings) you will need to add "fragile" in the frame options <---
+\begin{frame}[fragile]
+  \frametitle{Submitting a Job}
+      \begin{block}{Job Description Example : SMP}
+\begin{small}
+\begin{verbatim}
+#!/bin/bash
+#SBATCH -o /share/src/app/example/app-%j.%N.out
+#SBATCH -D /share/src/app/example
+#SBATCH -J MIGRATESMP
+#SBATCH --get-user-env
+#SBATCH --ntasks=1
+#SBATCH --cpu_bind=core
+#SBATCH --export=NONE
+#SBATCH --time=08:00:00
+ml load migrate/3.4.4-smp
+export OMP_NUM_THREADS=4
+srun migrate-n-thread parmfile.testml -nomenu
+\end{verbatim}
+\end{small}
+  \end{block}
+\end{frame}
+
+\subsection{code highlight with listings}
+% If you want to include some code (verbatim or listings) you will need to add "fragile" in the frame options <---
+\begin{frame}[fragile]
+  \frametitle{listings}
+      \begin{block}{Code highlight}
+\begin{tiny}
+\lstset{language=Python,escapechar=@,style=customcode}
+\begin{lstlisting} 
+def pi_chudnovsky(one=1000000):
+    k = 1
+    a_k = one
+    a_sum = one
+    b_sum = 0
+    C = 640320
+    C3_OVER_24 = C**3 // 24
+    while 1:
+        a_k *= -(6*k-5)*(2*k-1)*(6*k-1)
+        a_k //= k*k*k*C3_OVER_24
+        a_sum += a_k
+        b_sum += k * a_k
+        k += 1
+        if a_k == 0:
+            break
+    total = 13591409*a_sum + 545140134*b_sum
+    pi = (426880*sqrt(10005*one, one)*one) // total
+    return pi
+\end{lstlisting}
+\end{tiny}
+  \end{block}
+\end{frame}
+
+\section{Multiple boxes}
+% Example of three boxes  <---
+\begin{frame}{Three boxes example}
+  \begin{columns}[t]
+    \column{.3\textwidth}
+    \begin{block}{matrix one}
+      $G\colon$
+      \begin{tabular}{ccc}
+        A & B & C \\\hline
+        2 & 2 & 2 \\
+        0 & 2 & 0 \\
+        2 & 0 & 0 \\
+        0 & 2 & 2 
+      \end{tabular}
+    \end{block}
+
+    \column{.3\textwidth}
+    \begin{alertblock}{matrix two}
+      $H\colon$
+      \begin{tabular}{ccc}
+        A & B & C \\\hline
+        1 & 0 & 0 \\
+        0 & 1 & 1 \\
+        0 & 0 & 0 \\
+        0 & 1 & 0 \\
+        0 & 0 & 0 \\
+        1 & 0 & 0 \\
+        0 & 0 & 0 \\
+        0 & 1 & 1 
+      \end{tabular}
+    \end{alertblock}
+
+    \column{.4\textwidth}
+    \begin{block}{Figure}
+      \begin{center}
+        \begin{tikzpicture}[auto,thick]
+          \tikzstyle{node}=%
+          [%
+            minimum size=10pt,%
+            inner sep=0pt,%
+            outer sep=0pt,%
+            ball color=example text.fg,%
+            circle%
+          ]
+        
+          \node [node] {} [->]
+            child {node [node] {} edge from parent node[swap]{A}}
+            child {node [node] {}
+              child {node [node] {} edge from parent node{C}}
+              edge from parent node{B}
+            };
+        \end{tikzpicture}
+      \end{center}
+    \end{block}
+  \end{columns}
+\end{frame}
+
+%Questions 
+\section{Questions}
+\frame
+{
+  \frametitle{Questions}
+\begin{center}
+ \includegraphics[width=125pt]{doubtux.png}
+\end{center}
+}
+
+%Final slide 
+{
+\setbeamertemplate{background
+canvas}{\href{http://www.hpckp.org}{
+\hspace{-0.3cm}
+\includegraphics[height=\paperheight]{hpckp_slide01.png}}}
+\begin{frame}[plain]
+\end{frame}
+}
+
+\end{document} 
